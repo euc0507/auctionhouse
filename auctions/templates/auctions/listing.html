@@ -4,12 +4,22 @@
     <h2>{{ listing.title }}</h2>
 
     <div>{{ listing.description }}</div>
-    <div>Bid: {{ listing.starting_bid }}</div>
+    <div>Starting Bid: {{ listing.starting_bid }}</div>
+    {% if highest_bid %}
+    <div>Highest Bid: {{ current_price }} by {{ highest_bid.bidder.username }}</div>
+    {% else %}
+    <div>No bids yet</div>
+    {% endif %}
     <div>{{ category }}</div>
     <div>Created by {{ listing.creator }}</div>
-    <div><form action="{% url 'listing' id %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit Bid">
-    </form></div>
+    {% if user.is_authenticated %}
+        {% if low_bid %}
+        <ul><li>{{ low_bid }}</li></ul>
+        {% endif %}
+        <div><form action="{% url 'listing' id %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit Bid">
+        </form></div>
+    {% endif %}
 {% endblock %}

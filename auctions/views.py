@@ -94,20 +94,41 @@ class NewBid(forms.ModelForm):
         exclude = ["bidder","listing"]
 
 def listing(request, id):
+    listing = get_object_or_404(Listing, id=id)
+    low_bid = False
     if request.method == "POST":
-        form = NewBid(request.POST)
-        if form.is_valid():
-            bid = form.save(commit=False)
-            bid.bidder = request.user
-            bid.listing = get_object_or_404(Listing, id=id)
-            bid.save()
+        if request.user.is_authenticated:
+            form = NewBid(request.POST)
+            if form.is_valid() and listing.active_flag:
+                bid = form.save(commit=False)
+                bid.bidder = request.user
+                bid.listing = listing
+                highest_bid = listing.bid_set.order_by('-amount').first()
+                if highest_bid:
+                    current_price = highest_bid.amount
+                else:
+                    current_price = bid.listing.starting_bid
+
+                if bid.amount > current_price:
+                    bid.save()
+                else:
+                    low_bid = "Your bid must be higher than the current bid."
+
     form = NewBid()
     listing = get_object_or_404(Listing, id=id)
+    highest_bid = listing.bid_set.order_by('-amount').first()
+    if highest_bid:
+        current_price = highest_bid.amount
+    else:
+        current_price = listing.starting_bid
     return render(request, "auctions/listing.html",{
         "id": id,
         "listing": listing,
         "category": listing.get_category_display(),
-        "form": form
+        "form": form,
+        "current_price": current_price,
+        "highest_bid": highest_bid,
+        "low_bid": low_bid
     })
 
 
