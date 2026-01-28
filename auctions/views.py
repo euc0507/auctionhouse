@@ -13,6 +13,7 @@ from .models import User, Listing, Bid
 def index(request):
     return render(request, "auctions/index.html", {
         "listings": Listing.objects.all()
+
     })
 
 
@@ -71,7 +72,7 @@ def register(request):
 class NewListing(forms.ModelForm):
     class Meta:
         model = Listing
-        exclude = ["creator", "active_flag"]
+        exclude = ["creator", "active_flag", "winner", "watchlist"]
 
 def create(request):
     form = NewListing()

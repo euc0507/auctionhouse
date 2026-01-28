@@ -16,10 +16,19 @@ class Listing(models.Model):
     winner = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="won_listings")
     watchlist = models.ManyToManyField(User, blank=True, related_name="watchlist")
 
+    def current_price(self):
+        highest_bid = self.bid_set.order_by('-amount').first()
+        if highest_bid:
+            return highest_bid.amount
+        return self.starting_bid
+
     def __str__(self):
-        return f"{self.id}. {self.title}: {self.description} | Starting bid: {self.starting_bid} "
+        return f"{self.title}: {self.description} | Starting bid: {self.starting_bid} "
     
 class Bid(models.Model):
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=14, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.id}. ${self.amount} bid on {self.listing} from {self.bidder}"

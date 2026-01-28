@@ -5,7 +5,15 @@
 
     {% for listing in listings %}
         {% if listing.active_flag %}
-            <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
+            <div class="listing_div">
+                <h2><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h2> 
+                <p>{{ listing.description }}</p> 
+                <p>Starting Bid: {{ listing.starting_bid }}</p>
+                {% if listing.current_price != listing.starting_bid %}
+                    <p>Current Bid: {{ listing.current_price }}</p>
+                {% endif %}
+            </div>
+            <hr>
         {% endif %}
     {% endfor %} 
 
@@ -13,7 +21,7 @@
 
     {% for listing in listings %}
         {% if not listing.active_flag %}
-            <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id}}: {{ listing.title }} {{ listing.description }} Won by: {{ listing.winner }}</a></div>
+            <div><a href="{% url 'listing' listing.id %}">{{ listing.title }}: {{ listing.description }} Won by: {{ listing.winner }}</a></div>
         {% endif %}
     {% endfor %}
 {% endblock %}

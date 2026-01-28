@@ -5,7 +5,7 @@
 
     {% if user.watchlist.all %}
         {% for listing in user.watchlist.all %}
-            <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
+            <div><a href="{% url 'listing' listing.id %}">{{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
         {% endfor %} 
     {% else %}
         <div>No watched listings...</div>
