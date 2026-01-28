@@ -13,13 +13,27 @@
     <div>{{ category }}</div>
     <div>Created by {{ listing.creator }}</div>
     {% if user.is_authenticated %}
-        {% if low_bid %}
-        <ul><li>{{ low_bid }}</li></ul>
+        {% if listing.active_flag %}
+            {% if low_bid %}
+            <ul><li>{{ low_bid }}</li></ul>
+            {% endif %}
+            {% if listing.creator == request.user %}
+                <div><form action="{% url 'listing' id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Close Auction">
+                </form></div>
+            {% else %}
+                <div><form action="{% url 'listing' id %}" method="POST">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Submit Bid">
+                </form></div>
+            {% endif %}
+        {% else %}
+            <div>Listing Closed</div>
+            {% if listing.winner %}
+                <div>Auction won by: {{listing.winner}}</div>
+            {% endif %}
         {% endif %}
-        <div><form action="{% url 'listing' id %}" method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit Bid">
-        </form></div>
     {% endif %}
 {% endblock %}

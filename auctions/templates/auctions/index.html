@@ -4,6 +4,16 @@
     <h2>Active Listings</h2>
 
     {% for listing in listings %}
-        <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
+        {% if listing.active_flag %}
+            <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id }}: {{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
+        {% endif %}
     {% endfor %} 
+
+    <h2>Closed Listings</h2>
+
+    {% for listing in listings %}
+        {% if not listing.active_flag %}
+            <div><a href="{% url 'listing' listing.id %}">Listing {{ listing.id}}: {{ listing.title }} {{ listing.description }} Won by: {{ listing.winner }}</a></div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

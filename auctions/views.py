@@ -95,15 +95,21 @@ class NewBid(forms.ModelForm):
 
 def listing(request, id):
     listing = get_object_or_404(Listing, id=id)
+    highest_bid = listing.bid_set.order_by('-amount').first()
     low_bid = False
     if request.method == "POST":
+        if request.user == listing.creator:
+            listing.active_flag = False
+            if highest_bid:
+                listing.winner = highest_bid.bidder
+                listing.save()
+
         if request.user.is_authenticated:
             form = NewBid(request.POST)
             if form.is_valid() and listing.active_flag:
                 bid = form.save(commit=False)
                 bid.bidder = request.user
                 bid.listing = listing
-                highest_bid = listing.bid_set.order_by('-amount').first()
                 if highest_bid:
                     current_price = highest_bid.amount
                 else:
@@ -111,12 +117,11 @@ def listing(request, id):
 
                 if bid.amount > current_price:
                     bid.save()
+                    return redirect("listing", id=id)
                 else:
                     low_bid = "Your bid must be higher than the current bid."
 
     form = NewBid()
-    listing = get_object_or_404(Listing, id=id)
-    highest_bid = listing.bid_set.order_by('-amount').first()
     if highest_bid:
         current_price = highest_bid.amount
     else:

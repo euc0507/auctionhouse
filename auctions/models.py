@@ -11,8 +11,9 @@ class Listing(models.Model):
     starting_bid = models.DecimalField(max_digits=14, decimal_places=2)
     image = models.URLField(blank=True)
     category = models.CharField(blank=True, choices=[('EL', 'Electronics'), ('CL', 'Clothes')])
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_listings")
     active_flag = models.BooleanField(default=True)
+    winner = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="won_listings")
 
     def __str__(self):
         return f"{self.id}. {self.title}: {self.description} | Starting bid: {self.starting_bid} "
