@@ -98,12 +98,14 @@ def listing(request, id):
     highest_bid = listing.bid_set.order_by('-amount').first()
     low_bid = False
     if request.method == "POST":
+        #Creator closing auction
         if request.user == listing.creator:
             listing.active_flag = False
             if highest_bid:
                 listing.winner = highest_bid.bidder
                 listing.save()
 
+        #Submitting a new bid
         if request.user.is_authenticated:
             form = NewBid(request.POST)
             if form.is_valid() and listing.active_flag:
@@ -121,6 +123,7 @@ def listing(request, id):
                 else:
                     low_bid = "Your bid must be higher than the current bid."
 
+    #GET method
     form = NewBid()
     if highest_bid:
         current_price = highest_bid.amount
@@ -137,3 +140,16 @@ def listing(request, id):
     })
 
 
+def watchlist(request,id):
+    if request.user.is_authenticated and request.method=="POST":
+        listing = get_object_or_404(Listing, id=id)
+        if request.user in listing.watchlist.all():
+            listing.watchlist.remove(request.user)
+        else:
+            listing.watchlist.add(request.user)
+
+        return redirect("listing", id=id)
+    
+def my_watchlist(request):
+    if request.user.is_authenticated:
+        return render(request,"auctions/watchlist.html")

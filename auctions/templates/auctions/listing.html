@@ -35,5 +35,10 @@
                 <div>Auction won by: {{listing.winner}}</div>
             {% endif %}
         {% endif %}
+        {% if user in listing.watchlist.all %}
+            <form action="{% url 'watchlist' id %}" method="POST">{% csrf_token %}<input type="submit" value="Remove from watchlist"></form>
+        {% else %}
+            <form action="{% url 'watchlist' id %}" method="POST">{% csrf_token %}<input type="submit" value="Add to watchlist"></form>
+        {% endif %}
     {% endif %}
 {% endblock %}

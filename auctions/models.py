@@ -14,6 +14,7 @@ class Listing(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_listings")
     active_flag = models.BooleanField(default=True)
     winner = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="won_listings")
+    watchlist = models.ManyToManyField(User, blank=True, related_name="watchlist")
 
     def __str__(self):
         return f"{self.id}. {self.title}: {self.description} | Starting bid: {self.starting_bid} "
