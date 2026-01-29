@@ -40,5 +40,26 @@
         {% else %}
             <form action="{% url 'watchlist' id %}" method="POST">{% csrf_token %}<input type="submit" value="Add to watchlist"></form>
         {% endif %}
+        <hr>
+        <h2>Comments</h2>
+        <hr>
+        <form action="{% url 'listing' id %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type="submit" value="Post Comment" name="add_comment">
+        </form>
     {% endif %}
+    <hr>
+    {% if comments %}
+        <ul>
+            {% for comment in comments %}
+                <p>{{ comment }}<p>
+                Sent on {{ comment.timestamp|date:"M d, Y H:i" }}
+                <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+            <p>No comments yet...</p>
+    {% endif %}
+    <hr>
 {% endblock %}

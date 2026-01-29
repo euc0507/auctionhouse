@@ -7,7 +7,7 @@ from django.shortcuts import redirect, get_object_or_404
 
 from django import forms
 
-from .models import User, Listing, Bid
+from .models import User, Listing, Bid, Comment
 
 
 def index(request):
@@ -94,8 +94,14 @@ class NewBid(forms.ModelForm):
         model = Bid
         exclude = ["bidder","listing"]
 
+class MakeComment(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ["user", "listing"]
+
 def listing(request, id):
     listing = get_object_or_404(Listing, id=id)
+    comments = listing.comments.all()
     highest_bid = listing.bid_set.order_by('-amount').first()
     low_bid = False
     if request.method == "POST":
@@ -124,8 +130,20 @@ def listing(request, id):
                 else:
                     low_bid = "Your bid must be higher than the current bid."
 
+        #Making a comment
+        if request.user.is_authenticated and "add_comment" in request.POST:
+            comment = MakeComment(request.POST)
+            if comment.is_valid():
+                commented = comment.save(commit=False)
+                commented.user = request.user
+                commented.listing = listing
+                commented.save()
+                return redirect("listing", id=id)
+
+
     #GET method
     form = NewBid()
+    comment_form = MakeComment()
     if highest_bid:
         current_price = highest_bid.amount
     else:
@@ -137,7 +155,9 @@ def listing(request, id):
         "form": form,
         "current_price": current_price,
         "highest_bid": highest_bid,
-        "low_bid": low_bid
+        "low_bid": low_bid,
+        "comment_form": comment_form,
+        "comments": comments
     })
 
 
@@ -154,3 +174,4 @@ def watchlist(request,id):
 def my_watchlist(request):
     if request.user.is_authenticated:
         return render(request,"auctions/watchlist.html")
+    

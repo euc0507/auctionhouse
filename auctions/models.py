@@ -32,3 +32,15 @@ class Bid(models.Model):
 
     def __str__(self):
         return f"{self.id}. ${self.amount} bid on {self.listing} from {self.bidder}"
+    
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    comment = models.TextField()
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.user}: {self.comment}"
