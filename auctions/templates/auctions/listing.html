@@ -33,6 +33,9 @@
             <div>Listing Closed</div>
             {% if listing.winner %}
                 <div>Auction won by: {{listing.winner}}</div>
+                {% if listing.winner == request.user %}
+                    Congratulations! You won this auction!
+                {% endif %}
             {% endif %}
         {% endif %}
         {% if user in listing.watchlist.all %}

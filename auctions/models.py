@@ -15,6 +15,7 @@ class Listing(models.Model):
     active_flag = models.BooleanField(default=True)
     winner = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="won_listings")
     watchlist = models.ManyToManyField(User, blank=True, related_name="watchlist")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def current_price(self):
         highest_bid = self.bid_set.order_by('-amount').first()
