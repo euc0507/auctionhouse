@@ -52,3 +52,104 @@ body {
     margin: 1px 0;
     font-weight: bold;
 }
+
+.big_image {
+    width: 350px;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: #f0f0f0;
+}
+
+.price_text {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.amount {
+    width: 100%;
+    padding: 5px;
+    margin: 4px 0 4px 0;
+    font-size: 20px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.buttons {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 4px 0 4px 0;
+    font-size: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+}
+
+.buttons:hover {
+    background-color: #218838;
+}
+
+.close_auction_button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    font-size: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin: 4px 0 4px 0;
+}
+
+.close_auction_button:hover {
+    background-color: #c82333;
+}
+
+.details {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.listing_status {
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.user_name {
+    color: #0d6efd;
+}
+
+.comment_form {
+    width: 100%;
+    min-height: 80px;
+    height: 100px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+    font-family: inherit;
+}
+
+.comment_form:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+.comment_submit_button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.comment_submit_button:hover {
+    background-color: #0069d9;
+}

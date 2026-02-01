@@ -93,11 +93,24 @@ class NewBid(forms.ModelForm):
     class Meta:
         model = Bid
         exclude = ["bidder","listing"]
+        widgets = {
+            "amount": forms.NumberInput(attrs={"class":"amount","placeholder":"Bid"})
+        }
+        labels = {
+            "amount":""
+        }
+
 
 class MakeComment(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ["user", "listing"]
+        widgets = {
+            "comment": forms.Textarea(attrs={"class":"comment_form"})
+        }
+        labels = {
+            "comment":""
+        }
 
 def listing(request, id):
     listing = get_object_or_404(Listing, id=id)
@@ -175,3 +188,21 @@ def my_watchlist(request):
     if request.user.is_authenticated:
         return render(request,"auctions/watchlist.html")
     
+def categories(request):
+    sorted_categories = sorted(Listing._meta.get_field('category').choices, key=lambda x: x[1])
+    categories = [label for (code, label) in sorted_categories]
+    return render(request, "auctions/categories.html",{
+        "categories": categories
+    })
+
+
+CATEGORY_MAP = {label: code for code, label in Listing._meta.get_field('category').choices}
+def by_category(request, category):
+    categories = [label for code, label in Listing._meta.get_field('category').choices]
+    code = CATEGORY_MAP.get(category)
+    listings = Listing.objects.filter(category=code, active_flag=True)
+    return render(request, "auctions/by_category.html",{
+        "categories": categories,
+        "category": category,
+        "listings": listings
+    })

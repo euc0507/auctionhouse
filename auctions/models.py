@@ -10,7 +10,27 @@ class Listing(models.Model):
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=14, decimal_places=2)
     image = models.URLField(blank=True)
-    category = models.CharField(blank=True, choices=[('EL', 'Electronics'), ('CL', 'Clothes')])
+    category = models.CharField(blank=True, choices=[
+    ('EL', 'Electronics'),
+    ('CL', 'Clothing'),
+    ('TO', 'Toys'),
+    ('HM', 'Home'),
+    ('SP', 'Sports'),
+    ('BK', 'Books'),
+    ('MU', 'Music'),
+    ('MO', 'Movies'),
+    ('PH', 'Photography'),
+    ('FD', 'Food & Drink'),
+    ('HB', 'Health & Beauty'),
+    ('GM', 'Gaming'),
+    ('CO', 'Collectibles'),
+    ('JW', 'Jewelry'),
+    ('WA', 'Watches'),
+    ('AU', 'Automotive'),
+    ('PS', 'Pet Supplies'),
+    ('FI', 'Fitness'),
+    ('BB', 'Baby Products')])
+
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_listings")
     active_flag = models.BooleanField(default=True)
     winner = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name="won_listings")
