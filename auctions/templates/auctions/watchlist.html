@@ -5,7 +5,22 @@
 
     {% if user.watchlist.all %}
         {% for listing in user.watchlist.all %}
-            <div><a href="{% url 'listing' listing.id %}">{{ listing.title }} {{ listing.description }} {{ listing.starting_bid }}</a></div>
+            <div>
+                <a href="{% url 'listing' listing.id %}" class="listing_link">
+                <div class="listing_div">
+                    <img src="{{ listing.image|default:'' }}" alt="" class="listing_image">
+                    <div class="listing_info">
+                        <h3>{{ listing.title }}</h3>
+                        <p>{{ listing.description }}</p>
+                        <p class="bid_text">Starting Bid: ${{ listing.starting_bid }}</p>
+                        {% if listing.current_price != listing.starting_bid %}
+                            <p class="bid_text"">Current Bid: ${{ listing.current_price }}</p>
+                        {% endif %}
+                        <p class="created_text">Created On: {{ listing.created_at|date:"M d, Y H:i" }}</p>
+                    </div>
+                </div>
+                </a>
+            </div>
         {% endfor %} 
     {% else %}
         <div>No watched listings...</div>
